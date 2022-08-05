@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Camp Vote System</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <h1>Camp Vote System</h1>
+  </header>
+  <div class="mentors">
+    <% @mentors.sort_by(&:id).each do |mentor| %>
+      <div class="mentor">
+        <p class="mentor-name"><%= mentor.name %></p>
+        <p class="mentor-count <%= mentor.id %>"><%= mentor.count %></p>
+        <div class="mentor-image">
+          <img src="<%= mentor.image %>">
+        </div>
+        <div class="btn-plus-wrap">
+          <button class="btn-plus" onclick="Plus(<%= mentor.id %>)">投票する</button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <script>
+    function Plus(id) {
+      $.ajax({
+        url: '/plus/' + id,
+        type: 'POST',
+      }
+      )
+      .done(function(data) {
+        $('.mentor-count.' + id).text(data);
+      });
+    }
+  </script>
+</body>
+</html>
